@@ -5,11 +5,13 @@ const List = async (letters) => {
     throw new Error("Informe os filtros corretamente!");
   }
 
-  const regexQueries = letters.map((letter) => ({
-    title: { $regex: letter, $options: "i" },
-  }));
+  const regexArray = letters.map((letter) => new RegExp(`^${letter}`, "i"));
 
-  const terms = await Term.find({ $or: regexQueries });
+  const filter = {
+    $or: regexArray.map((regex) => ({ title: { $regex: regex } })),
+  };
+
+  const terms = await Term.find(filter);
 
   return terms;
 };
