@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-require('dotenv').config()
+require("dotenv").config();
 
 const Term = require("./models/Term");
 
@@ -33,19 +33,19 @@ app.post("/terms/create", async (req, res) => {
 });
 
 app.post("/terms/list", async (req, res) => {
-  const { filters } = req.body;
-
-  const { letters } = filters;
+  const { letters } = req.body;
 
   try {
-    if(!letters) {
+    if (!letters) {
       res.status(422).json({ message: "Informe os filtros corretamente!" });
       return;
     }
 
-    const terms = await Term.find({
-      title: { $regex: `^${letters}`, $options: "i" },
-    });
+    const regexQueries = letters.map((letter) => ({
+      title: { $regex: letter, $options: "i" },
+    }));
+
+    const terms = await Term.find({ $or: regexQueries });
 
     res.status(200).json({ terms: terms });
   } catch (error) {
@@ -114,9 +114,9 @@ app.delete("/terms/delete/:id", async (req, res) => {
   }
 });
 
-app.get('/', (req, res) => {
-  res.json({ message: 'Oi Express!' })
-})
+app.get("/", (req, res) => {
+  res.json({ message: "Oi Express!" });
+});
 
 mongoose
   .connect(process.env.MONGO_URI)
