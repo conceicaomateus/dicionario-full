@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { useTermContext } from "../../../../contexts/TermContext";
+import { useTermContext } from "../../../../../../contexts/TermContext";
 
 const LETTERS = [
   "A",

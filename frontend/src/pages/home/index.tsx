@@ -1,29 +1,41 @@
 import { styled } from "styled-components";
-import { Alphabet } from "./components/alphabet";
-import { TermsList } from "./components/terms";
 import { useAuthContext } from "../../contexts/AuthContext";
+import { Inicio } from "./components/Inicio";
+import { useState } from "react";
+import { FormCadastro } from "./components/form-cadastro";
+
+type Tabs = "inicio" | "cadastrar";
 
 export function Home() {
   const { logout } = useAuthContext();
+  const [selectedTab, setSelectedTab] = useState<Tabs>("inicio");
 
   return (
     <Body>
       <NavBar>
-        <span>Logo</span>
+        <span onClick={() => setSelectedTab("inicio")}>Logo</span>
 
         <LinksContainer>
-          <Link>Início</Link>
-          <Link>Cadastrar</Link>
+          <Link
+            $isSelected={selectedTab === "inicio"}
+            onClick={() => setSelectedTab("inicio")}
+          >
+            Início
+          </Link>
+          <Link
+            $isSelected={selectedTab === "cadastrar"}
+            onClick={() => setSelectedTab("cadastrar")}
+          >
+            Cadastrar
+          </Link>
         </LinksContainer>
 
         <LeaveButton onClick={logout}>Sair</LeaveButton>
       </NavBar>
 
-      <Alphabet />
+      {selectedTab === "inicio" && <Inicio />}
 
-      <Content>
-        <TermsList />
-      </Content>
+      {selectedTab === "cadastrar" && <FormCadastro />}
     </Body>
   );
 }
@@ -31,38 +43,46 @@ export function Home() {
 const Body = styled.main`
   height: 100%;
   width: 100%;
-  overflow: hidden;
 
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  overflow: hidden;
 `;
 
 const NavBar = styled.nav`
-  width: calc(100% - 30px);
+  width: 100%;
   height: 60px;
 
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 
   background-color: #4f8699;
   padding: 0px 16px;
 
   color: white;
+
+  span {
+    cursor: pointer;
+  }
 `;
 
-const Link = styled.a``;
+const Link = styled.span<{ $isSelected: boolean }>`
+  height: max-content;
+
+  border-bottom: ${({ $isSelected }) =>
+    $isSelected ? "2px solid white" : "none"};
+
+  cursor: pointer;
+`;
 
 const LinksContainer = styled.div`
   width: max-content;
 
   display: flex;
   gap: 24px;
-`;
-
-const Content = styled.div`
-  height: calc(100% - 50px);
 `;
 
 const LeaveButton = styled.button`

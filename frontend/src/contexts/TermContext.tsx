@@ -14,6 +14,7 @@ interface TermContext {
   terms: Term[];
   onChangeLetter: (letter: string) => void;
   letters: string[];
+  isFetching?: boolean;
 }
 
 const termContext = createContext({} as TermContext);
@@ -22,7 +23,7 @@ export function TermProvider({ children }: PropsWithChildren) {
   const [letters, setLetters] = useState<string[]>([]);
   const [terms, setTerms] = useState<Term[]>([]);
 
-  useQuery({
+  const { isFetching, isLoading } = useQuery({
     queryKey: ["terms", letters],
     queryFn: () => TermsService().List({ letters }),
     enabled: !!letters.length,
@@ -44,7 +45,14 @@ export function TermProvider({ children }: PropsWithChildren) {
   }, [letters]);
 
   return (
-    <termContext.Provider value={{ letters, onChangeLetter, terms }}>
+    <termContext.Provider
+      value={{
+        letters,
+        onChangeLetter,
+        terms,
+        isFetching: isFetching || isLoading,
+      }}
+    >
       {children}
     </termContext.Provider>
   );
