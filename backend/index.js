@@ -13,7 +13,7 @@ app.use(
 
 app.use(express.json());
 
-app.post("/terms", async (req, res) => {
+app.post("/terms/create", async (req, res) => {
   const { title, description, examples } = req.body;
 
   const term = {
@@ -31,14 +31,91 @@ app.post("/terms", async (req, res) => {
   }
 });
 
-app.get("/", (req, res) => {
-  res.json({ message: "Hello World" });
+app.post("/terms/list", async (req, res) => {
+  const { filters } = req.body;
+
+  const { letters } = filters;
+
+  try {
+    if(!letters) {
+      res.status(422).json({ message: "Informe os filtros corretamente!" });
+      return;
+    }
+
+    const terms = await Term.find({
+      title: { $regex: `^${letters}`, $options: "i" },
+    });
+
+    res.status(200).json({ terms: terms });
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});
+
+app.get("/terms/getById/:id", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const term = await Term.findOne({ _id: id });
+
+    if (!term) {
+      res.status(422).json({ message: "Termo não encontrado" });
+      return;
+    }
+
+    res.status(200).json({ term: term });
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});
+
+app.patch("/terms/update/:id", async (req, res) => {
+  const id = req.params.id;
+
+  const { title, description, examples } = req.body;
+
+  const term = {
+    title,
+    description,
+    examples,
+  };
+
+  try {
+    const updatedTerm = await Term.updateOne({ _id: id }, term);
+
+    if (updatedTerm.matchedCount === 0) {
+      res.status(422).json({ message: "Termo não encontrado!" });
+      return;
+    }
+
+    res.status(200).json({ Id: response.id });
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});
+
+app.delete("/terms/delete/:id", async (req, res) => {
+  const id = req.params.id;
+
+  const term = await Term.findOne({ _id: id });
+
+  if (!term) {
+    res.status(422).json({ message: "Termo não encontrado" });
+    return;
+  }
+
+  try {
+    await Term.deleteOne({ _id: id });
+
+    res.status(200).json({ message: "Termo removido com sucesso!" });
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
 });
 
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
-    console.log("Conectado ao banco de dados");
     app.listen(8000);
   })
   .catch((err) => console.log(err));
