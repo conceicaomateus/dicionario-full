@@ -6,7 +6,7 @@ const List = async (req, res) => {
   try {
     const terms = await TermsRepository.List(letters);
 
-    res.status(200).json({ terms: terms });
+    res.status(200).json({ items: terms });
   } catch (error) {
     res.status(500).json({ error: error });
   }
@@ -30,7 +30,7 @@ const GetById = async (req, res) => {
   try {
     const term = await TermsRepository.GetById(id);
 
-    res.status(200).json({ term: term });
+    res.status(200).json(term);
   } catch (error) {
     res.status(500).json({ error: error });
   }
