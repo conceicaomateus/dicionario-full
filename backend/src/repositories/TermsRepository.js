@@ -53,7 +53,7 @@ const Update = async ({ id, title, description, examples }) => {
     examples,
   };
 
-  await Term.updateOne({ _id: id }, term);
+  const updatedTerm = await Term.updateOne({ _id: id }, term);
 
   if (updatedTerm.matchedCount === 0) {
     throw new Error("Termo não encontrado");
