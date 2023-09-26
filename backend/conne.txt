@@ -1,0 +1,4 @@
+user = root
+passsword = Z3e0zzjHjNu2OIJd
+
+mongo = mongodb+srv://root:Z3e0zzjHjNu2OIJd@apicluster.vndlhnm.mongodb.net/dicionario?retryWrites=true&w=majority
