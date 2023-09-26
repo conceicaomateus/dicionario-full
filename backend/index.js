@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+require('dotenv').config()
 
 const Term = require("./models/Term");
 
@@ -112,6 +113,10 @@ app.delete("/terms/delete/:id", async (req, res) => {
     res.status(500).json({ error: error });
   }
 });
+
+app.get('/', (req, res) => {
+  res.json({ message: 'Oi Express!' })
+})
 
 mongoose
   .connect(process.env.MONGO_URI)
