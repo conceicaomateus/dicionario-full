@@ -118,7 +118,10 @@ export function TermProvider({ children }: PropsWithChildren) {
       toast.success(`Termo salvo com sucesso!`);
       const firstLetter = term.title?.split("")[0];
 
-      if (letters.includes(firstLetter?.toUpperCase() ?? "")) {
+      if (
+        letters.includes(firstLetter?.toUpperCase() ?? "") ||
+        letters[0] === "A-Z"
+      ) {
         refetch();
       }
     },
