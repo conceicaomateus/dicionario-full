@@ -6,17 +6,21 @@ import { GoSearch } from "react-icons/go";
 import { useTermContext } from "../../../../contexts/TermContext";
 
 export function Inicio() {
-  const { onChangeTab, onSearchTerms } = useTermContext();
+  const { onChangeTab, onSearchTerms, letters } = useTermContext();
+
+  const placeholder =
+    letters.length === 0 ? "Selecione uma letra..." : "Pesquisa...";
 
   return (
     <Body>
       <Alphabet />
 
       <HeaderList>
-        <SearchInput>
+        <SearchInput $disabled={letters.length === 0}>
           <input
             type="text"
-            placeholder="Pesquisa..."
+            placeholder={placeholder}
+            disabled={letters.length === 0}
             onChange={({ target }) => onSearchTerms(target.value)}
           />
           <GoSearch />
@@ -56,7 +60,7 @@ const HeaderList = styled.header`
   max-width: 1200px;
 `;
 
-const SearchInput = styled.div`
+const SearchInput = styled.div<{ $disabled: boolean }>`
   display: flex;
   align-items: center;
 
@@ -67,10 +71,11 @@ const SearchInput = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.primary};
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors.purple};
+    border-color: ${({ theme, $disabled }) =>
+      !$disabled && theme.colors.purple};
 
     svg {
-      color: ${({ theme }) => theme.colors.purple};
+      color: ${({ theme, $disabled }) => !$disabled && theme.colors.purple};
     }
   }
 
@@ -102,6 +107,11 @@ const SearchInput = styled.div`
     }
 
     &::placeholder {
+      color: ${({ theme }) => theme.colors.grey};
+    }
+
+    &:disabled {
+      cursor: default;
       color: ${({ theme }) => theme.colors.grey};
     }
   }

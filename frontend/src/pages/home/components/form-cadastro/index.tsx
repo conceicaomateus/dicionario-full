@@ -6,6 +6,7 @@ import styled from "styled-components";
 import * as yup from "yup";
 import { useTermContext } from "../../../../contexts/TermContext";
 import { useEffect } from "react";
+import { FullScreenLoader } from "../../../../components/FullScreenLoader";
 
 const termSchema = yup.object().shape({
   _id: yup.string(),
@@ -17,7 +18,7 @@ const termSchema = yup.object().shape({
 type Term = yup.InferType<typeof termSchema>;
 
 export function FormCadastro() {
-  const { term, onSaveTerm } = useTermContext();
+  const { term, onSaveTerm, isSaving, isFetchingTerm } = useTermContext();
   const {
     register,
     control,
@@ -46,19 +47,16 @@ export function FormCadastro() {
 
   return (
     <Body>
+      {(isSaving || isFetchingTerm) && <FullScreenLoader />}
       <Form onSubmit={handleSubmit((data) => onSaveTerm(data))}>
         <InputsWrapper>
           <FormField>
             <Label>Código</Label>
-            <Id
-              readOnly
-              placeholder="Código identificador único"
-              {...register("_id")}
-            />
+            <Id readOnly placeholder="Código do termo" {...register("_id")} />
           </FormField>
 
           <FormField>
-            <Label>Nome do Termo</Label>
+            <Label $required>Nome do Termo</Label>
             <InputWithMessageError
               $errorMessage={errors.title?.message !== undefined}
             >
@@ -156,7 +154,9 @@ const FormField = styled.div`
   display: flex;
 `;
 
-const Label = styled.label`
+const Label = styled.label<{ $required?: boolean }>`
+  font-weight: ${({ $required }) => ($required ? "700" : "300")};
+  font-size: 14px;
   color: ${({ theme }) => theme.colors.white};
   width: 200px;
   min-width: 200px;
@@ -189,7 +189,7 @@ const Input = styled.input`
 `;
 
 const Id = styled.input`
-  width: 200px;
+  width: 100%;
   height: 30px;
 
   background-color: ${({ theme }) => theme.colors.light};

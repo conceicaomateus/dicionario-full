@@ -18,6 +18,8 @@ interface TermContext {
   onChangeLetter: (letter: string) => void;
   letters: string[];
   isFetching?: boolean;
+  isFetchingTerm?: boolean;
+  isSaving?: boolean;
   selectedTab: Tabs;
   onChangeTab: (tab: Tabs) => void;
   onDeleteTerm: (id: string) => void;
@@ -26,6 +28,7 @@ interface TermContext {
   term: Term | undefined;
   onSaveTerm: (term: Partial<Term>) => void;
   onSearchTerms: (search: string) => void;
+  onLogout: () => void;
 }
 
 const termContext = createContext({} as TermContext);
@@ -36,6 +39,14 @@ export function TermProvider({ children }: PropsWithChildren) {
   const [filteredTerms, setFilteredTerms] = useState<Term[] | null>(null);
   const [selectedTab, setSelectedTab] = useState<Tabs>("inicio");
   const [editId, setEditId] = useState<string | null>(null);
+
+  const onLogout = () => {
+    setTerms([]);
+    setLetters([]);
+    setFilteredTerms(null);
+    setSelectedTab("inicio");
+    setEditId(null);
+  };
 
   const onChangeTab = (tab: Tabs) => {
     setSelectedTab(tab);
@@ -51,7 +62,7 @@ export function TermProvider({ children }: PropsWithChildren) {
     },
   });
 
-  const { data: item } = useQuery({
+  const { data: item, isFetching: isFetchingTerm } = useQuery({
     queryFn: () => TermsService().GetById(editId ?? ""),
     queryKey: ["term", editId],
     enabled: !!editId,
@@ -59,6 +70,12 @@ export function TermProvider({ children }: PropsWithChildren) {
 
   const onChangeLetter = (letter: string) => {
     const copy = [...letters];
+
+    if (letter === "A-Z" && copy.includes("A-Z")) {
+      setLetters([]);
+
+      return;
+    }
 
     if (letter === "A-Z") {
       setLetters(["A-Z"]);
@@ -98,7 +115,7 @@ export function TermProvider({ children }: PropsWithChildren) {
     mutationFn: (term: Partial<Term>) => TermsService().SaveOrUpdate(term),
     onSuccess: (id, term) => {
       setEditId(id);
-      toast.success(`Termo '${id}' salvo com sucesso!`);
+      toast.success(`Termo salvo com sucesso!`);
       const firstLetter = term.title?.split("")[0];
 
       if (letters.includes(firstLetter?.toUpperCase() ?? "")) {
@@ -138,6 +155,8 @@ export function TermProvider({ children }: PropsWithChildren) {
         letters,
         terms: filteredTerms ?? terms,
         isFetching: isFetching || isLoading,
+        isFetchingTerm,
+        isSaving: saveMutation.isLoading,
         selectedTab,
         editId,
         term: item,
@@ -147,6 +166,7 @@ export function TermProvider({ children }: PropsWithChildren) {
         onEditTerm,
         onSaveTerm,
         onSearchTerms,
+        onLogout,
       }}
     >
       {children}

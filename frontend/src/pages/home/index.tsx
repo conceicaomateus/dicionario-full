@@ -3,18 +3,27 @@ import { useAuthContext } from "../../contexts/AuthContext";
 import { Inicio } from "./components/Inicio";
 import { FormCadastro } from "./components/form-cadastro";
 import { useTermContext } from "../../contexts/TermContext";
+import { PiSignOut } from "react-icons/pi";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export function Home() {
   const { logout } = useAuthContext();
-  const { selectedTab, onChangeTab } = useTermContext();
+  const { selectedTab, onChangeTab, onLogout } = useTermContext();
 
   return (
     <Body>
-      <ToastContainer position="top-center" />
+      <ToastContainer
+        position="top-left"
+        hideProgressBar={false}
+        autoClose={500}
+      />
       <NavBar>
-        <span onClick={() => onChangeTab("inicio")}>Logo</span>
+        <Logo
+          alt="logo"
+          src="/logo.png"
+          onClick={() => onChangeTab("inicio")}
+        />
 
         <LinksContainer>
           <Link
@@ -31,7 +40,14 @@ export function Home() {
           </Link>
         </LinksContainer>
 
-        <LeaveButton onClick={logout}>Sair</LeaveButton>
+        <LogoutButton
+          onClick={() => {
+            logout();
+            onLogout();
+          }}
+        >
+          <PiSignOut />
+        </LogoutButton>
       </NavBar>
 
       {selectedTab === "inicio" && <Inicio />}
@@ -85,6 +101,8 @@ const Link = styled.span<{ $isSelected: boolean }>`
     background-color: ${({ theme, $isSelected }) =>
       !$isSelected && theme.colors.ligthPrimary};
   }
+
+  font-weight: 500;
 `;
 
 const LinksContainer = styled.div`
@@ -94,7 +112,11 @@ const LinksContainer = styled.div`
   gap: 16px;
 `;
 
-const LeaveButton = styled.button`
+const LogoutButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   background-color: transparent;
   border: none;
 
@@ -110,4 +132,17 @@ const LeaveButton = styled.button`
   &:hover {
     background-color: ${({ theme }) => theme.colors.ligthPrimary};
   }
+
+  svg {
+    font-size: 20px;
+  }
+`;
+
+const Logo = styled.img`
+  width: 40px;
+  height: 40px;
+
+  border-radius: 50%;
+
+  cursor: pointer;
 `;

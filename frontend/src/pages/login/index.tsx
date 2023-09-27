@@ -24,7 +24,9 @@ export function Login() {
   return (
     <Body onKeyDown={onKeyDown}>
       <Wrapper>
-        <span>Logo</span>
+        <LogoContainer>
+          <Logo alt="logo" src="/logo.png" />
+        </LogoContainer>
 
         <Container>
           <FormField>
@@ -33,6 +35,7 @@ export function Login() {
               placeholder="Digite seu usuário"
               name="name"
               onChange={handleInputChange}
+              autoComplete="off"
             />
           </FormField>
           <FormField>
@@ -71,8 +74,8 @@ const Wrapper = styled.main`
   justify-content: space-between;
 
   width: 360px;
-  height: 380px;
-  padding: 16px;
+  height: 440px;
+  padding: 22px 16px;
 
   background-color: ${({ theme }) => theme.colors.primary};
 
@@ -134,4 +137,18 @@ const Button = styled.button`
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
+`;
+
+const LogoContainer = styled.div`
+  display: flex;
+  justify-content: center;
+
+  width: 100%;
+`;
+
+const Logo = styled.img`
+  width: 90px;
+  height: 90px;
+
+  border-radius: 50%;
 `;
