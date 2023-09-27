@@ -5,6 +5,12 @@ const List = async (letters) => {
     throw new Error("Informe os filtros corretamente!");
   }
 
+  if (letters[0] === "A-Z") {
+    const terms = await Term.find().sort({ title: 1 });
+
+    return terms;
+  }
+
   const regexArray = letters.map((letter) => new RegExp(`^${letter}`, "i"));
 
   const filter = {

@@ -1,32 +1,33 @@
 import { styled } from "styled-components";
 import { useAuthContext } from "../../contexts/AuthContext";
 import { Inicio } from "./components/Inicio";
-import { useState } from "react";
 import { FormCadastro } from "./components/form-cadastro";
-
-type Tabs = "inicio" | "cadastrar";
+import { useTermContext } from "../../contexts/TermContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export function Home() {
   const { logout } = useAuthContext();
-  const [selectedTab, setSelectedTab] = useState<Tabs>("inicio");
+  const { selectedTab, onChangeTab } = useTermContext();
 
   return (
     <Body>
+      <ToastContainer position="top-center" />
       <NavBar>
-        <span onClick={() => setSelectedTab("inicio")}>Logo</span>
+        <span onClick={() => onChangeTab("inicio")}>Logo</span>
 
         <LinksContainer>
           <Link
             $isSelected={selectedTab === "inicio"}
-            onClick={() => setSelectedTab("inicio")}
+            onClick={() => onChangeTab("inicio")}
           >
             Início
           </Link>
           <Link
             $isSelected={selectedTab === "cadastrar"}
-            onClick={() => setSelectedTab("cadastrar")}
+            onClick={() => onChangeTab("cadastrar")}
           >
-            Cadastrar
+            Cadastro
           </Link>
         </LinksContainer>
 
@@ -59,10 +60,10 @@ const NavBar = styled.nav`
   justify-content: space-between;
   align-items: center;
 
-  background-color: #4f8699;
-  padding: 0px 16px;
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.white};
 
-  color: white;
+  padding: 0px 16px;
 
   span {
     cursor: pointer;
@@ -72,24 +73,41 @@ const NavBar = styled.nav`
 const Link = styled.span<{ $isSelected: boolean }>`
   height: max-content;
 
-  border-bottom: ${({ $isSelected }) =>
-    $isSelected ? "2px solid white" : "none"};
+  padding: 4px 12px;
+  border-radius: 8px;
+
+  background-color: ${({ $isSelected, theme }) =>
+    $isSelected && theme.colors.secondary};
 
   cursor: pointer;
+
+  &:hover {
+    background-color: ${({ theme, $isSelected }) =>
+      !$isSelected && theme.colors.ligthPrimary};
+  }
 `;
 
 const LinksContainer = styled.div`
   width: max-content;
 
   display: flex;
-  gap: 24px;
+  gap: 16px;
 `;
 
 const LeaveButton = styled.button`
   background-color: transparent;
   border: none;
 
-  color: white;
   font-size: 16px;
+
+  padding: 4px 12px;
+  border-radius: 8px;
+
+  color: ${({ theme }) => theme.colors.white};
+
   cursor: pointer;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.ligthPrimary};
+  }
 `;

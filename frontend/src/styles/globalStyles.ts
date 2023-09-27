@@ -11,7 +11,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     width: 100vw;
     height: 100vh;
-    background-color: #ccc;
+    background-color: #FFF;
     overflow: hidden;
   }
 
@@ -19,7 +19,7 @@ const GlobalStyle = createGlobalStyle`
   /* Firefox */
   * {
     scrollbar-width: auto;
-    scrollbar-color: #656066 #ffffff;
+    scrollbar-color: ${({ theme }) => theme.colors.primary};
   }
 
   /* Chrome, Edge, and Safari */
@@ -32,7 +32,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   *::-webkit-scrollbar-thumb {
-    background-color: #656066;
+    background-color: ${({ theme }) => theme.colors.primary};
     border-radius: 10px;
   }
 `;

@@ -1,3 +1,3 @@
-export type ListRespontApi<T> = {
+export type ListResponseApi<T> = {
   items: T[];
 };

@@ -30,7 +30,7 @@ export function Login() {
           <FormField>
             <Label>Usuário</Label>
             <Input
-              placeholder="Usuário"
+              placeholder="Digite seu usuário"
               name="name"
               onChange={handleInputChange}
             />
@@ -39,7 +39,7 @@ export function Login() {
             <Label>Senha</Label>
             <Input
               type="password"
-              placeholder="Senha"
+              placeholder="Digite sua senha"
               name="password"
               onChange={handleInputChange}
             />
@@ -74,8 +74,11 @@ const Wrapper = styled.main`
   height: 380px;
   padding: 16px;
 
-  background-color: white;
-  border: 1px solid #ccc;
+  background-color: ${({ theme }) => theme.colors.primary};
+
+  border-radius: 8px;
+
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 `;
 
 const Container = styled.div`
@@ -94,37 +97,41 @@ const FormField = styled.div`
 
 const Label = styled.label`
   font-size: 14px;
-  font-weight: 700;
-  color: #333;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.light};
 `;
 
 const Input = styled.input`
   height: 46px;
-  border-radius: 2px;
-  border: 1px solid #cbcbcb;
+  border: none;
+  border-bottom: 1px solid #cbcbcb;
   padding: 0px 8px;
+
+  background-color: transparent;
+
+  transition: all 0.2s ease-in-out;
+
+  color: ${({ theme }) => theme.colors.light};
 
   &:focus {
     outline: none;
-    border: 1px solid #4f8699;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.purple};
+  }
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.grey};
   }
 `;
 
 const Button = styled.button`
   height: 46px;
-  border-radius: 2px;
+  border-radius: 6px;
   padding: 0px 8px;
   border: none;
-  background-color: #4f8699;
+  background-color: ${({ theme }) => theme.colors.purple};
   color: white;
 
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
 `;
-
-// .color1 { #dad6ca };
-// .color2 { #1bb0ce };
-// .color3 { #4f8699 };
-// .color4 { #6a5e72 };
-// .color5 { #563444 };

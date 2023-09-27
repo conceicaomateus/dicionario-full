@@ -28,6 +28,7 @@ const LETTERS = [
   "X",
   "Y",
   "Z",
+  "A-Z",
 ];
 
 export function Alphabet() {
@@ -56,6 +57,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 4px;
 
   margin-top: 16px;
   overflow: hidden;
@@ -70,15 +72,21 @@ const Letter = styled.span<{ $isSelected: boolean }>`
   align-items: center;
   justify-content: center;
 
-  transition: all 0.1s;
+  border-radius: 6px;
 
   cursor: pointer;
 
-  background-color: ${({ $isSelected }) => ($isSelected ? "#6a5e72" : "none")};
+  background-color: ${({ $isSelected, theme }) =>
+    $isSelected ? theme.colors.purple : "none"};
   color: ${({ $isSelected }) => ($isSelected ? "white" : "#6a5e72")};
 
+  font-weight: ${({ $isSelected }) => ($isSelected ? 500 : 400)};
+
   &:hover {
-    background-color: #6a5e72;
-    color: white;
+    font-weight: 600;
+
+    background-color: ${({ theme, $isSelected }) =>
+      !$isSelected && theme.colors.light};
+    color: ${({ theme, $isSelected }) => !$isSelected && theme.colors.purple};
   }
 `;

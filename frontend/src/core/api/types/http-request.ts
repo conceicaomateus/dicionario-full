@@ -5,4 +5,4 @@ export type HttpRequest = {
   headers?: Record<string, string>;
 };
 
-export type HttpMethod = "post" | "get" | "put" | "delete";
+export type HttpMethod = "post" | "get" | "put" | "delete" | "patch";
