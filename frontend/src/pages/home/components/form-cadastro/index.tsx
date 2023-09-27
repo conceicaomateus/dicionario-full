@@ -17,6 +17,13 @@ const termSchema = yup.object().shape({
 
 type Term = yup.InferType<typeof termSchema>;
 
+const defaultValues: Term = {
+  _id: "",
+  title: "",
+  description: "",
+  examples: [],
+};
+
 export function FormCadastro() {
   const { term, onSaveTerm, isSaving, isFetchingTerm } = useTermContext();
   const {
@@ -28,12 +35,7 @@ export function FormCadastro() {
     formState: { errors },
   } = useForm<Term>({
     resolver: yupResolver(termSchema),
-    defaultValues: {
-      _id: "",
-      title: "",
-      description: "",
-      examples: [],
-    },
+    defaultValues,
   });
   const { fields, append, remove } = useFieldArray({
     control,
@@ -48,7 +50,12 @@ export function FormCadastro() {
   return (
     <Body>
       {(isSaving || isFetchingTerm) && <FullScreenLoader />}
-      <Form onSubmit={handleSubmit((data) => onSaveTerm(data))}>
+      <Form
+        onSubmit={handleSubmit((data) => {
+          onSaveTerm(data);
+          reset(defaultValues);
+        })}
+      >
         <InputsWrapper>
           <FormField>
             <Label>Código</Label>

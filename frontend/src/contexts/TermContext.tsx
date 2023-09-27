@@ -113,8 +113,7 @@ export function TermProvider({ children }: PropsWithChildren) {
 
   const saveMutation = useMutation({
     mutationFn: (term: Partial<Term>) => TermsService().SaveOrUpdate(term),
-    onSuccess: (id, term) => {
-      setEditId(id);
+    onSuccess: (__id, term) => {
       toast.success(`Termo salvo com sucesso!`);
       const firstLetter = term.title?.split("")[0];
 
