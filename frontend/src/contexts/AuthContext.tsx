@@ -50,7 +50,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
   const redirectToLogin = () => {
     setStatus("Unauthorized");
-    navigate("/login");
+    navigate("/");
   };
 
   const login = ({ password, name }: LoginParams) => {
@@ -110,7 +110,7 @@ export function LoginRedirect() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    navigate("/login");
+    navigate("/");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

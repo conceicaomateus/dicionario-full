@@ -11,7 +11,7 @@ const List = async (letters) => {
     $or: regexArray.map((regex) => ({ title: { $regex: regex } })),
   };
 
-  const terms = await Term.find(filter);
+  const terms = await Term.find(filter).sort({ title: 1 });
 
   return terms;
 };

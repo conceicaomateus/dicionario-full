@@ -7,11 +7,10 @@ import { AuthGuard, LoginRedirect } from "./contexts/AuthContext";
 const Router = createBrowserRouter([
   {
     element: <App />,
-    path: "/",
     children: [
       {
         element: <Login />,
-        path: "/login",
+        index: true,
       },
       {
         element: <AuthGuard fallback={<LoginRedirect />} entry={<Outlet />} />,
