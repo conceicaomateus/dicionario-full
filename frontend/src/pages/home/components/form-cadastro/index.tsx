@@ -21,7 +21,7 @@ const defaultValues: Term = {
   _id: "",
   title: "",
   description: "",
-  examples: [],
+  examples: [""],
 };
 
 export function FormCadastro() {
